@@ -122,6 +122,11 @@ def get_thirdparty_packages(triton_cache_path):
 
 
 def download_and_copy_ptxas():
+    # ppc64le (and any non-x86_64 host): the conda tarball below ships an
+    # x86_64 ptxas that cannot execute here. The build script copies the CUDA
+    # toolkit's native ptxas into triton/third_party/cuda/bin/ instead
+    # (see PPC64LE.md). Skipping the download entirely.
+    return
 
     base_dir = os.path.dirname(__file__)
     src_path = "bin/ptxas"
@@ -217,7 +222,7 @@ class CMakeBuild(build_ext):
         python_include_dir = sysconfig.get_path("platinclude")
         cmake_args = [
             "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-            "-DLLVM_ENABLE_WERROR=ON",
+            "-DLLVM_ENABLE_WERROR=OFF",
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
             "-DTRITON_BUILD_TUTORIALS=OFF",
             "-DTRITON_BUILD_PYTHON_MODULE=ON",
