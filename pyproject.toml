@@ -1,0 +1,17 @@
+# Root project = the vendored Mamba-2 SSD kernels, so that
+#   pip install git+https://github.com/boa-collaboration/triton-power9-volta@power9-volta
+# installs `mamba_kernels` (pure python; needs a working triton + torch).
+# The triton wheel itself comes from this repo's Releases, built from python/.
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mamba-kernels"
+version = "2.2.5"
+description = "Mamba-2 SSD Triton kernels (mamba_chunk_scan_combined, gated RMSNorm), vendored from mamba-ssm 2.2.5 — no mamba-ssm required"
+requires-python = ">=3.9"
+dependencies = ["einops", "packaging"]
+
+[tool.setuptools]
+packages = ["mamba_kernels"]
