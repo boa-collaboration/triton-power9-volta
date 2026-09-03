@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --account=bdman38
+#SBATCH --account=<project>          # your Bede project code
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --time=12:00:00
@@ -10,14 +10,14 @@ set -e
 # serialize concurrent build jobs (infer + gpu partitions share this dir):
 # whoever gets the lock builds; the other waits, then finds the stages done
 # and skips straight to the kernel test on ITS OWN GPU type.
-exec 9>/nobackup/projects/bdman38/tritonbuild/.lock
+exec 9>/nobackup/projects/<project>/tritonbuild/.lock
 flock 9
 module load gcc/12.2
 module load cuda/12.4.1
-source /nobackup/projects/bdman38/miniconda3/etc/profile.d/conda.sh
+source /nobackup/projects/<project>/miniconda3/etc/profile.d/conda.sh
 conda activate boa-ppc
 
-B=/nobackup/projects/bdman38/tritonbuild
+B=/nobackup/projects/<project>/tritonbuild
 PREFIX=$B/llvm-install
 export CUDA_HOME=$(dirname $(dirname $(which nvcc)))
 echo "gcc: $(gcc --version|head -1) | cmake: $(cmake --version|head -1) | nvcc: $(nvcc --version|tail -2|head -1)"
